@@ -21,13 +21,10 @@ int main() {
   DateTime *dt4 = &dt;
   dt.showTime();
   dt1.showTime();
-<<<<<<< HEAD
   dt.showMoon();
-=======
   dt2.showTime();
   dt3.showTime();
   dt4->showTime();
->>>>>>> upstream/master
   return 0;
 }
 DateTime::DateTime()
