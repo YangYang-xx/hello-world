@@ -2,43 +2,84 @@
 #include <iostream>
 class SuperPrime {
   public:
+  	int number;
   	SuperPrime():number(0) {
 	}
-  	~SuperPrime() {
+  	~SuperPrime() {	
 	}
   	bool isSuperPrime() {
   	  split();
   	  int a = sum();
 	  int b = multi();
 	  int c = squareSum();
-	  if (isPrime(number) && isPrime(a) && isPrime(b) && isPrime(c))
-	    return true; 
-  	  return false;
+	  if (isPrime(number) && isPrime(a) && isPrime(b) && isPrime(c)){
+	  	return true;
+	  }
+	  else{
+	  	return false;
+	  }
 	}
   private:
-  	const int number;
-  	int N[100], size;
-  	bool isPrime(int n) { 
-  	
-  	  return false;
+  	int N[4], size;        
+  	//const int number; 
+  	bool isPrime(int n) {
+	  int result=0; 
+  	  for(int c=2;c<n;c++)
+  	  {
+  	  	if(n%c == 0)
+  	  	{
+  	  		result++;
+		}
+	  }
+	  if(result==0)
+	  {
+	  	return true;
+	  }
+	  else
+	  {
+	  	return false;
+	  }
 	}
-	void split() {
+	void split() {  
+	  N[0]=number/100;
+	  N[1]=(number-N[0]*100)/10;
+	  N[2]=number%10;
 	  // number split into N
 	}
 	int sum() {
-	  return 0;
+	  int sum=0;
+	  for(int i=0;i<3;i++)
+	  {
+	  	sum += N[i];
+	  }
+	  return sum;
 	}
 	int multi() {
-	  return 0;
+	  int multi=1;
+	  for(int i=0;i<3;i++)
+	  {
+	  	multi *= N[i];
+	  }
+	  return multi;
 	}
 	int squareSum() {
-	  return 0;
+	  int squareSum=0;
+	  for(int i=0;i<3;i++)
+	  {
+	  	squareSum += N[i]*N[i];
+	  }
+	  return squareSum;
 	}
 };
 class Set {
   public:
   	Set(int from, int to) {
-  	  size = 0;
+  	  size = to - from +1 ;
+  	  for(int i=1;i<size;i++)
+  	  {
+  	  	set[0].number=from;
+  	  	set[i].number=set[i-1].number+1;
+	  }    //初始化set[]，注意.number与from的类型一致 
 	}
   	~Set() {
 	}
@@ -51,11 +92,13 @@ class Set {
 	}
   	int sum() {
   	  int sum = 0;
-  	  /*
   	  for (int i = 0; i < size; i++)
+  	  { 
   	    if(set[i].isSuperPrime())
-  	      sum += set[i];
-  	      */ 
+  	    { 
+  	      sum += set[i].number;
+  	    } 
+  	  } 
 	  return sum; 
 	}
   private:
