@@ -1,113 +1,133 @@
-//作业：完成以下框架的代码细节，程序能编译运行得到正确结果 
+//作业：面向对象设计以下框架的代码细节，程序能编译运行得到正确结果 
 #include <iostream>
-class SuperPrime {
+class Prime {
   public:
-  	int number;
-  	SuperPrime():number(0) {
+  	Prime():number(0) {
 	}
-  	~SuperPrime() {	
+  	Prime(int n):number(n) {
+  		count=0;
 	}
-  	bool isSuperPrime() {
-  	  split();
-  	  int a = sum();
-	  int b = multi();
-	  int c = squareSum();
-	  if (isPrime(number) && isPrime(a) && isPrime(b) && isPrime(c)){
-	  	return true;
-	  }
-	  else{
-	  	return false;
-	  }
+	~Prime() {
+	}
+  	bool isPrime() {
+	  for(int i=2;i<number;i++){     //2到number-1的因子 
+	  	if(number%i==0)
+	  	count++;
+	  } 
+	  if(count==0)
+	    return true;
+  	  else
+		return false;
 	}
   private:
-  	int N[4], size;        
-  	//const int number; 
-  	bool isPrime(int n) {
-	  int result=0; 
-  	  for(int c=2;c<n;c++)
-  	  {
-  	  	if(n%c == 0)
-  	  	{
-  	  		result++;
-		}
-	  }
-	  if(result==0)
-	  {
-	  	return true;
-	  }
-	  else
-	  {
-	  	return false;
-	  }
+  	const int number;
+  	int count;
+}; 
+class PrimeSet {
+  public:
+  	PrimeSet(int size) {
+  	  //集合的构造什么？ 
+  	  N = new Prime*[size];
+  	  this->size = size;
+  	  index = 0;
 	}
-	void split() {  
-	  N[0]=number/100;
-	  N[1]=(number-N[0]*100)/10;
-	  N[2]=number%10;
+	~PrimeSet() {
+  	  for (int i = 0; i < index; ++i)  //销毁对象 
+		delete N[i]; 
+	  delete[] N;
+	}
+	bool add(int n) {
+	  if(index == size)  return false;
+	  Prime *p = new Prime(n);
+	  N[index] = p;
+	  index += 1;
+	  return true;
+	}
+	bool isAllPrime() {
+	  for(int i = 0; i < index; i++)
+	    if (!N[i]->isPrime())
+	      return false;
+	  return true;
+	} 
+  private:
+  	Prime **N;
+	int size, index;
+};
+class SuperPrime {
+  public:
+  	SuperPrime():number(0), pset(3) {  //为什么必须有？ 
+  	}
+  	SuperPrime(int n):number(n), pset(3) {
+  	  split();  //它就是构造对象 
+	}
+  	~SuperPrime() {
+	}
+  	bool isSuperPrime() {
+  	  //怎么使用pset？ 
+  	  Prime p(number);
+	  if (p.isPrime() && pset.isAllPrime())
+	    return true; 
+  	  return false;
+	}
+  private:
+  	const int number;
+  	PrimeSet pset;
+	void split() {   //工厂方法设计模式 
 	  // number split into N
+	  int temp = number;
+	  while(temp > 0) {
+	  	int n = temp % 10;
+	  	temp /= 10;
+	  	pset.add(n);  //作业：单个数字为对象？还是和/积/平方和为对象？ 
+	  } 
 	}
+	Prime r1,r2,r3;
 	int sum() {
-	  int sum=0;
-	  for(int i=0;i<3;i++)
-	  {
-	  	sum += N[i];
-	  }
-	  return sum;
+	  return 0;
 	}
 	int multi() {
-	  int multi=1;
-	  for(int i=0;i<3;i++)
-	  {
-	  	multi *= N[i];
-	  }
-	  return multi;
+	  return 0;
 	}
 	int squareSum() {
-	  int squareSum=0;
-	  for(int i=0;i<3;i++)
-	  {
-	  	squareSum += N[i]*N[i];
-	  }
-	  return squareSum;
+	  return 0;
 	}
 };
-class Set {
+class SuperPrimeSet {
   public:
-  	Set(int from, int to) {
-  	  size = to - from +1 ;
-  	  for(int i=1;i<size;i++)
-  	  {
-  	  	set[0].number=from;
-  	  	set[i].number=set[i-1].number+1;
-	  }    //初始化set[]，注意.number与from的类型一致 
+  	SuperPrimeSet(int from, int to) {
+  	  size = to - from;
+  	  for (int i = from; i < to; i++)
+  	    set[i-from] = new SuperPrime(i);
 	}
-  	~Set() {
+  	~SuperPrimeSet() {
+  	  for(int i = 0; i < size; i++)
+  	    delete set[i];
 	}
   	int count() {
   	  int count = 0;
   	  for (int i = 0; i < size; i++)
-  	    if(set[i].isSuperPrime())
+  	    if(set[i]->isSuperPrime())
   	      count += 1;
 	  return count; 
 	}
   	int sum() {
   	  int sum = 0;
+  	  /*
   	  for (int i = 0; i < size; i++)
-  	  { 
   	    if(set[i].isSuperPrime())
-  	    { 
-  	      sum += set[i].number;
-  	    } 
-  	  } 
+  	      sum += set[i];
+  	      */ 
 	  return sum; 
 	}
   private:
-  	SuperPrime set[1000];
-  	int size;
+  	SuperPrime **set;
+  	int size, index;
 };
 int main() {
-  Set ss(100, 999);
-  std::cout << "How Many: " << ss.count() << std::endl;
-  std::cout << "Sum is " << ss.sum() << std::endl;
+  SuperPrime sp(113);
+  if (sp.isSuperPrime())
+    std::cout << "113 is SuperPrime" << std::endl;
+  else
+    std::cout << "113 is NOT SuperPrime" << std::endl;
   return 0;
 }
