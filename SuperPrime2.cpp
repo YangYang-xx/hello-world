@@ -37,7 +37,7 @@ class PrimeSet {
 	  delete[] N;
 	}
 	bool add(int n) {
-	  if(index == size)  return false;
+	  if(index == size)   return false;
 	  Prime *p = new Prime(n);
 	  N[index] = p;
 	  index += 1;
@@ -72,17 +72,27 @@ class SuperPrime {
   private:
   	const int number;
   	PrimeSet pset;
+  	int Num[3],sum=0,multi=1,squareSum=0;
 	void split() {   //工厂方法设计模式 
 	  // number split into N
 	  int temp = number;
+	  int k=0;
 	  while(temp > 0) {
 	  	int n = temp % 10;
 	  	temp /= 10;
-	  	pset.add(n);  //作业：单个数字为对象？还是和/积/平方和为对象？ 
+	  	Num[k]=n;
+	  	k++;
+	  }
+	  for(int i=0;i<3;i++){
+	  	sum+=Num[i];
+	  	multi*=Num[i];
+	  	squareSum+=Num[i]*Num[i];
 	  } 
+	  pset.add(sum);
+	  pset.add(multi);
+	  pset.add(squareSum);  //作业：单个数字为对象？还是和/积/平方和为对象？ 
 	}
-	Prime r1,r2,r3;
-	int sum() {
+	/*int sum() {
 	  return 0;
 	}
 	int multi() {
@@ -90,7 +100,7 @@ class SuperPrime {
 	}
 	int squareSum() {
 	  return 0;
-	}
+	}*/
 };
 class SuperPrimeSet {
   public:
