@@ -1,4 +1,4 @@
-//作业：面向对象设计以下框架的代码细节，程序能编译运行得到正确结果 
+//作业：删除多余的集合类，使用继承方法实现相同的功能。 
 #include <iostream>
 class Prime {
   public:
@@ -53,7 +53,7 @@ class PrimeSet {
   	Prime **N;
 	int size, index;
 };
-class SuperPrime {
+class SuperPrime: public Prime {
   public:
   	SuperPrime():number(0), pset(3) {  //为什么必须有？ 
   	}
@@ -92,15 +92,6 @@ class SuperPrime {
 	  pset.add(multi);
 	  pset.add(squareSum);  //作业：单个数字为对象？还是和/积/平方和为对象？ 
 	}
-	/*int sum() {
-	  return 0;
-	}
-	int multi() {
-	  return 0;
-	}
-	int squareSum() {
-	  return 0;
-	}*/
 };
 class SuperPrimeSet {
   public:
